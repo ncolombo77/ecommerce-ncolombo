@@ -42,7 +42,7 @@ const ItemDetail = () => {
         <div className="container mx-auto p-5">
             <h1>{product.name}</h1>
             <div className="card card-side bg-base-100 shadow-xl">
-                <figure><img src={'../img/products/' + product.img} alt={product.name} /></figure>
+                <figure><img src={'https://ncolombo77.github.io/ecommerce-ncolombo/img/products/' + product.img} alt={product.name} /></figure>
                 <div className="card-body">
                     <p>{product.desc}</p>
                     <p>$ {product.price}</p>
