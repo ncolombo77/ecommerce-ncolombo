@@ -1,5 +1,6 @@
 import { React, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { getDocs, getFirestore, query, where, collection } from 'firebase/firestore';
 
 
 export const ItemDetail = ( {id, name, img, price} ) => {
@@ -28,31 +29,12 @@ const ItemList = ( { categoryId } ) => {
 
   const getProducts = () => {
 
-    const productsPromise = new Promise ( (resolve) => {
-      setTimeout ( () => {
-        resolve ( products )
-      }, 1000)
+    const db = getFirestore();
+    const itemsRef = ( categoryId === undefined ) ? collection(db, 'Items') : query(collection(db, 'Items'), where('categoryId', '==', Number(categoryId)));
+    getDocs( itemsRef ).then( snapshot => {
+      const data = snapshot.docs.map(i => ({ id: i.id, ...i.data()}));
+      setProducts(data);
     })
-
-    productsPromise
-      .then( res => {
-
-        const URL = '../products.json'
-        fetch( URL )
-        .then( res => res.json())
-        .then( data => {
-            if ( categoryId != undefined )
-              setProducts( data.filter(p => p.categoryId === Number(categoryId)) )
-            else
-              setProducts(data)
-        })
-        .catch(error => { console.log(error);});
-
-      })
-      .catch( err => {
-        console.log('Error: ' + err)
-      })
-
 
   }
 

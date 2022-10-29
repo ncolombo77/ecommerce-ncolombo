@@ -1,7 +1,7 @@
 import ItemList from "./ItemList"
-import { categories } from './data/categories'
 import { useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
+import { getDocs, getFirestore, query, where, collection } from 'firebase/firestore';
 
 const styleH2 = {
     padding: '20px'
@@ -37,14 +37,23 @@ const ItemListContainer = () => {
         getCategory()
       }, [categoryId])
 
+
     const getCategory = () => {
-        if (categoryId != undefined)
-            setCategory(categories.find( c => c.categoryId === Number(categoryId)))
+      if (categoryId !== undefined) {
+        const db = getFirestore();
+        const itemsRef = collection(db, 'Categories');
+        const q = query(itemsRef, where('categoryId', '==', Number(categoryId)));
+        getDocs( q ).then(snapshot => {
+          const data = snapshot.docs.map(c => ({ id: c.id, ...c.data() }));
+          setCategory(data[0]);
+        })
+      }
+
     }
 
     return (
         <>
-            { categoryId != undefined ?
+            { categoryId !== undefined ?
                 <CategoryTitle {...category } />
             :
                 <GenericTitle />
