@@ -2,7 +2,6 @@ import './App.css';
 import NavBar from './components/NavBar'
 import CartWidget from './components/CartWidget'
 import LandingPage from './components/LandingPage';
-import { useContext } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { CartContextProvider } from '../src/context/cartContext'
 import ItemDetail from './components/ItemDetail';
